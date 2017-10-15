@@ -53,7 +53,7 @@ UKF::UKF() {
 
   // Radar measurement noise standard deviation radius change in m/s
   std_radrd_ = 0.3;
-
+  
   /**
   TODO:
 
@@ -95,8 +95,8 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 		P_ << 1, 0, 0, 0, 0,
 			  0, 1, 0, 0, 0,
 			  0, 0, 2, 0, 0,
-			  0, 0, 0, M_PI, 0,
-			  0, 0, 0, 0, M_PI;
+			  0, 0, 0, M_PI/2, 0,
+			  0, 0, 0, 0, M_PI/2;
 
 		// set weights for average sigma points
 		// create vector for weights
@@ -168,7 +168,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 	Pp_ = P_;
 
 	// Extrapolate future positions of the run-away vehicle 
-	Prediction(0.3, xp_, Pp_);
+	Prediction(1, xp_, Pp_);
 }
 
 /**
