@@ -168,7 +168,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 	Pp_ = P_;
 
 	// Extrapolate future positions of the run-away vehicle 
-	Prediction(1, xp_, Pp_);
+	Prediction(.3, xp_, Pp_);
 }
 
 /**
