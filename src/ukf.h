@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include "tools.h"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -24,9 +25,15 @@ public:
 
   ///* state vector: [pos1 pos2 vel_abs yaw_angle yaw_rate] in SI units and rad
   VectorXd x_;
-
+  
   ///* state covariance matrix
   MatrixXd P_;
+  
+  ///* projection x based on current status
+  VectorXd xp_;
+  
+  ///* projection of P based on current status
+  MatrixXd Pp_;
 
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
@@ -67,6 +74,14 @@ public:
   ///* Sigma point spreading parameter
   double lambda_;
 
+  Tools tools_;
+
+  ///* Current NIS for radar
+  double NIS_radar_;
+
+  ///* Current NIS for laser
+  double NIS_laser_;
+
 
   /**
    * Constructor
@@ -89,7 +104,7 @@ public:
    * matrix
    * @param delta_t Time between k and k+1 in s
    */
-  void Prediction(double delta_t);
+  void Prediction(double delta_t, VectorXd &x, MatrixXd &P);
 
   /**
    * Updates the state and the state covariance matrix using a laser measurement
@@ -102,6 +117,11 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+
+  void Update(MeasurementPackage &meas_package, MatrixXd &Zsig);
+
 };
+
+
 
 #endif /* UKF_H */
